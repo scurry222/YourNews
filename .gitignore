@@ -169,3 +169,4 @@ $RECYCLE.BIN/
 # Anything env does not get committed
 *.env
 
+/key.config.js
