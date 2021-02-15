@@ -29,7 +29,7 @@ export default class SearchBar extends Component {
 
   render() {
     return (
-      <form onSubmit={ this.handleSubmit }>
+      <form className='search-bar' onSubmit={ this.handleSubmit }>
         <input
             className='tag'
             name='tag'

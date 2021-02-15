@@ -1,13 +1,23 @@
+* {
+    box-sizing: border-box;
+    font-family: "Playfair Display", sans-serif;
+}
+
+body {
+    background-color: #fff;
+}
+
+
 .news-list {
     margin: 5rem 20rem;
-    background-color: #f7f8fa;
-    border-radius: 0.3rem;
 }
 
 .article {
     margin: 2rem;
     padding: 1rem;
     border-bottom: lightskyblue solid 0.1rem;
+    background-color: #f4f1eb;
+    border-radius: 0.3rem;
 }
 
 .main-title {
@@ -16,8 +26,7 @@
 }
 
 .article-image {
-    width: 50%;
-    height: 50%;
+    width: 100%;
     min-width: 15rem;
     min-height: 8rem;
 }

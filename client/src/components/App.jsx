@@ -1,7 +1,18 @@
 import React from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
+
 import NewsList from './List.jsx';
 import SearchBar from './SearchBar.jsx';
-import axios from 'axios';
+import TagList from './TagList.jsx';
+
+const FeedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,6 +25,7 @@ export default class App extends React.Component {
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
     this.getArticlesByTags = this.getArticlesByTags.bind(this);
+    this.removeTag = this.removeTag.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +46,6 @@ export default class App extends React.Component {
 
   getArticlesByTags() {
     const { tags, articles, totalResults } = this.state;
-    console.log(tags)
     this.setState({ articles: [] });
     this.setState({ totalResults: 0 });
     tags.forEach((tag) => 
@@ -54,18 +65,29 @@ export default class App extends React.Component {
       callback();
       this.getArticlesByTags();
     });
-  }  
+  }
+
+  removeTag(tag) {
+    const { tags } = this.state;
+    tags.splice(tags.indexOf(tag));
+    this.setState({ tags }, () => {
+      this.getArticlesByTags();
+    })
+  }
 
   render () {
-    const { articles, totalResults } = this.state;
+    const { articles, totalResults, tags } = this.state;
     return (
     <div>
       <h1 className='main-title'>YourNews</h1>
-      <SearchBar submitTag={ this.submitTag } />
-      <NewsList
-        articles={ articles }
-        total={ totalResults }
-      />
+      <FeedContainer>
+        <SearchBar submitTag={ this.submitTag } />
+        <TagList tags={ tags } removeTag={ this.removeTag } />
+        <NewsList
+          articles={ articles }
+          total={ totalResults }
+        />
+      </FeedContainer>
     </div>)
   }
 }
