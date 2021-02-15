@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import NewsList from './List.jsx';
 import SearchBar from './SearchBar.jsx';
 import TagList from './TagList.jsx';
+import { shuffle } from '../utils.js';
 
 const FeedContainer = styled.div`
   display: flex;
@@ -43,7 +44,6 @@ export default class App extends React.Component {
       .catch((err) => console.error(err));
   }
 
-
   getArticlesByTags() {
     const { tags, articles, totalResults } = this.state;
     this.setState({ articles: [] });
@@ -52,7 +52,7 @@ export default class App extends React.Component {
       axios.get(`/api/search/:${tag}`)
         .then(({ data }) => {
           this.setState({
-            articles: [...articles, data.articles],
+            articles: shuffle(articles.concat(data.articles)),
             totalResults: totalResults + data.totalResults
         })
       })
