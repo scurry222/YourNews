@@ -43,12 +43,14 @@ export default class App extends React.Component {
       totalResults: 0,
       tags: [],
       modalShow: false,
+      user: '',
     }
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
     this.getArticlesByTags = this.getArticlesByTags.bind(this);
     this.removeTag = this.removeTag.bind(this);
     this.setModalShow = this.setModalShow.bind(this);
+    this.addUser = this.addUser.bind(this);
   }
 
   componentDidMount() {
@@ -99,6 +101,10 @@ export default class App extends React.Component {
 
   setModalShow() {
     this.setState({modalShow: !this.state.modalShow});
+  }
+
+  addUser(username) {
+    this.setState({user: username})
   }
 
   render () {

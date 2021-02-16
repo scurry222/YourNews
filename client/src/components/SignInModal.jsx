@@ -16,8 +16,11 @@ const SignInModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <form >
+            Username: 
             <input type="text"/>
-
+            Password:
+            <input type="text"/>
+            <button>submit</button>
           </form>
         </Modal.Body>
         <Modal.Footer>

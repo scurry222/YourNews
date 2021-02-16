@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/YourNewsUsers');
 
 var db = mongoose.connection;
 
@@ -11,21 +11,49 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-var itemSchema = mongoose.Schema({
-  quantity: Number,
-  description: String
+var UserSchema = mongoose.Schema({
+  username: String,
+  password: String,
+  tags: {
+    enum: ['tag']
+  }
 });
 
-var Item = mongoose.model('Item', itemSchema);
+var User = mongoose.model('User', UserSchema);
 
-var selectAll = function(callback) {
-  Item.find({}, function(err, items) {
+var selectOneUser = function(username, password, callback) {
+  User.findOne({username, password}, function(err, Users) {
     if(err) {
       callback(err, null);
     } else {
-      callback(null, items);
+      callback(null, Users);
     }
   });
 };
 
-module.exports.selectAll = selectAll;
+var addUserTags = async(username, password, tags, callback) => {
+  User.findOneAndUpdate({username, password}, tags, {
+    new: true
+  }, async(err, succ) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      console.log(succ)
+      if (!succ) {
+        succ = new User({username, password, tags});
+      }
+      succ.save(function(err) {
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(null, succ)
+        }
+      })
+    }
+  })
+}
+
+module.exports = {
+  addUserTags,
+  selectOneUser,
+};
