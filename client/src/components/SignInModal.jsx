@@ -15,12 +15,20 @@ const SignInModal = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form >
+          <form onSubmit={(e) => props.handleSignInSubmit(e)}>
             Username: 
-            <input type="text"/>
+            <input
+              name="username"
+              value={props.username}
+              onChange={(e) => props.handleSignInInput(e)}
+              />
             Password:
-            <input type="text"/>
-            <button>submit</button>
+            <input 
+              password="password"
+              value={props.password}
+              onChange={(e) => props.handleSignInInput(e)}
+            />
+            <button>Submit</button>
           </form>
         </Modal.Body>
         <Modal.Footer>

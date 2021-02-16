@@ -43,14 +43,17 @@ export default class App extends React.Component {
       totalResults: 0,
       tags: [],
       modalShow: false,
-      user: '',
+      username: '',
+      password: '',
     }
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
     this.getArticlesByTags = this.getArticlesByTags.bind(this);
     this.removeTag = this.removeTag.bind(this);
     this.setModalShow = this.setModalShow.bind(this);
-    this.addUser = this.addUser.bind(this);
+    this.submitUser = this.submitUser.bind(this);
+    this.handleSignInInput = this.handleSignInInput.bind(this);
+    this.handleSignInSubmit = this.submitUser.bind(this);
   }
 
   componentDidMount() {
@@ -103,12 +106,29 @@ export default class App extends React.Component {
     this.setState({modalShow: !this.state.modalShow});
   }
 
-  addUser(username) {
-    this.setState({user: username})
+  submitUser(username) {
+    this.setState({ displayName: username })
+  }
+  handleSignInInput(e) {
+    const { name, value } = e.target;
+    this.setState({[name]: value});
+  }
+
+  handleSignInSubmit(e) {
+      e.preventDefault();
+      const { username, password } = this.state;
+      username && password
+      ? this.props.submitUser(username, () => {
+        this.setState({
+          username: '',
+          password: '',
+        })
+      })
+      : null;
   }
 
   render () {
-    const { articles, totalResults, tags, modalShow } = this.state;
+    const { articles, totalResults, tags, modalShow, username, password } = this.state;
     return (
     <div>
       <Header >
@@ -123,9 +143,13 @@ export default class App extends React.Component {
           total={ totalResults }
         />
       </FeedContainer>
-      <SignInModal 
+      <SignInModal
         show={modalShow}
         onHide={() => this.setModalShow}
+        user={username}
+        password={password}
+        handleSignInInput={this.handleSignInInput}
+        handleSignInSubmit={this.handleSignInSubmit}
       />
     </div>)
   }
