@@ -14,7 +14,7 @@ const SearchbarContainer = styled.form`
 `;
 
 const SearchbarInput = styled.input`
-  width: 94%;
+  width: 92%;
   height: 100%;
   outline: none;
   border-radius: 2rem;

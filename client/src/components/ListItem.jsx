@@ -48,7 +48,7 @@ const ListItem = ({ article }) => {
         <ArticleDescription>
           { article.description }
         </ArticleDescription>
-        <ArticleContent>{ article.content }</ArticleContent>
+        <ArticleContent>{ article.content && article.content.split('[')[0] }</ArticleContent>
         <br />
         <ArticleLink href={article.url}> Read More </ArticleLink>
       </Article>

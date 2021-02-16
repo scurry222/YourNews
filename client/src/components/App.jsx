@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import NewsList from './List.jsx';
 import SearchBar from './SearchBar.jsx';
 import TagList from './TagList.jsx';
+import SignInModal from './SignInModal.jsx'
 import { shuffle } from '../utils.js';
 
 const FeedContainer = styled.div`
@@ -16,17 +17,23 @@ const FeedContainer = styled.div`
 
 const Header = styled.div`
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  height: 2rem;
-  padding-left: 0.5rem;
+  height: 3rem;
+  padding: 0 0.5rem;
   border-bottom: 2px solid lightskyblue;
 `;
 
 const MainTitle = styled.h1`
   font-size: 1.5rem;
-
+  top:0;
 `;
 
+const SignIn = styled.button`
+
+`
 
 export default class App extends React.Component {
   constructor(props) {
@@ -35,12 +42,13 @@ export default class App extends React.Component {
       articles: [],
       totalResults: 0,
       tags: [],
-      showModal: false,
+      modalShow: false,
     }
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
     this.getArticlesByTags = this.getArticlesByTags.bind(this);
     this.removeTag = this.removeTag.bind(this);
+    this.setModalShow = this.setModalShow.bind(this);
   }
 
   componentDidMount() {
@@ -89,14 +97,18 @@ export default class App extends React.Component {
     })
   }
 
+  setModalShow() {
+    this.setState({modalShow: !this.state.modalShow});
+  }
+
   render () {
-    const { articles, totalResults, tags} = this.state;
+    const { articles, totalResults, tags, modalShow } = this.state;
     return (
     <div>
       <Header >
         <MainTitle>YourNews</MainTitle>
+        <SignIn onClick={ this.setModalShow }>Sign In</SignIn>
       </Header>
-
       <FeedContainer>
         <SearchBar submitTag={ this.submitTag } />
         <TagList tags={ tags } removeTag={ this.removeTag } />
@@ -105,6 +117,10 @@ export default class App extends React.Component {
           total={ totalResults }
         />
       </FeedContainer>
+      <SignInModal 
+        show={modalShow}
+        onHide={() => this.setModalShow}
+      />
     </div>)
   }
 }
