@@ -14,6 +14,12 @@ const FeedContainer = styled.div`
   align-items: center;
 `
 
+const MainTitle = styled.h1`
+  padding-left: 1rem;
+  font-size: 1.5rem;
+  border-bottom: 2px solid lightskyblue;
+`;
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -79,7 +85,7 @@ export default class App extends React.Component {
     const { articles, totalResults, tags } = this.state;
     return (
     <div>
-      <h1 className='main-title'>YourNews</h1>
+      <MainTitle>YourNews</MainTitle>
       <FeedContainer>
         <SearchBar submitTag={ this.submitTag } />
         <TagList tags={ tags } removeTag={ this.removeTag } />

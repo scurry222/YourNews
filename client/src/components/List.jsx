@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import ListItem from './ListItem.jsx';
+
+
+const NewsListContainer = styled.div`
+  margin: 5rem 25rem;
+  width: 40%;
+`
+
+const ArticleDivider = styled.div`
+  border-bottom: lightskyblue solid 0.1rem;
+`;
+
 
 const NewsList = ({ articles, total }) => {
   const [feed, setFeed] = useState([]);
@@ -7,12 +19,22 @@ const NewsList = ({ articles, total }) => {
     setFeed(articles)
   }, [articles])
   return (
-  <div className='news-list'>
-      There are { total } articles.
+    <NewsListContainer>
       {
-        feed.map((article, i) => <ListItem key={i} article={ article }/>)
+        !total
+        ? <div>No subscriptions found. Browse through recommended tags or use the searchbar to get started.</div>
+        : null
       }
-    </div>
+      {
+        feed.map((article, i) => 
+          <div>
+            <ListItem key={i} article={ article }/>
+            <ArticleDivider />
+          </div>
+        
+        )
+      }
+    </NewsListContainer>
   )
 }
 

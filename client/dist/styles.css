@@ -7,35 +7,10 @@ body {
     background-color: #fff;
 }
 
-
-.news-list {
-    margin: 5rem 20rem;
-}
-
-.article {
-    margin: 2rem;
-    padding: 1rem;
-    border-bottom: lightskyblue solid 0.1rem;
-    background-color: #f4f1eb;
-    border-radius: 0.3rem;
-}
-
-.main-title {
-    font-size: 1.2rem;
-    border-bottom: lightskyblue solid 0.1rem;
-}
-
-.article-image {
-    width: 100%;
-    min-width: 15rem;
-    min-height: 8rem;
-}
-
-.article-title {
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-.article-description {
-    padding: 2rem 0;
+#data-scrollbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }

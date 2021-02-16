@@ -1,6 +1,33 @@
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
-export default class SearchBar extends Component {
+const SearchbarContainer = styled.form`
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  width: 30%;
+  border-radius: 2rem;
+  border: 1px solid lightgrey;
+`;
+
+const SearchbarInput = styled.input`
+  width: 94%;
+  height: 100%;
+  outline: none;
+  border-radius: 2rem;
+  padding: 0 1rem;
+  border: none;
+`;
+
+const SearchbarButton = styled.button`
+  border: none;
+  outline: none;
+  background: #fff;
+`;
+
+export default class Searchbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,24 +47,26 @@ export default class SearchBar extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const { tagName } = this.state;
-    this.props.submitTag(tagName, () => {
+    tagName
+    ? this.props.submitTag(tagName, () => {
       this.setState({
         tagName: '',
       })
     })
+    : null;
   }
 
   render() {
     return (
-      <form className='search-bar' onSubmit={ this.handleSubmit }>
-        <input
-            className='tag'
+      <SearchbarContainer
+        onSubmit={ this.handleSubmit }>
+        <SearchbarInput
             name='tag'
             value={ this.state.tagName }
             onChange={ this.handleInput }
         />
-        <button>Submit</button>
-      </form>
+        <SearchbarButton><FontAwesomeIcon icon={faSearch}/></SearchbarButton>
+      </SearchbarContainer>
     )
   }
 }
