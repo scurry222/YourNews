@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import NewsList from './List.jsx';
 import SearchBar from './SearchBar.jsx';
 import TagList from './TagList.jsx';
-import SignInModal from './SignInModal.jsx'
+import SignInPage from './SignInPage.jsx'
 import { shuffle } from '../utils.js';
 
 const FeedContainer = styled.div`
@@ -29,11 +29,17 @@ const Header = styled.div`
 const MainTitle = styled.h1`
   font-size: 1.5rem;
   top:0;
+  cursor: pointer;
 `;
 
 const SignIn = styled.button`
 
 `
+
+const UserName = styled.div`
+  font-size: 1.4rem;
+  cursor: pointer;
+`;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -42,22 +48,21 @@ export default class App extends React.Component {
       articles: [],
       totalResults: 0,
       tags: [],
-      modalShow: false,
-      username: '',
-      password: '',
+      signInShow: false,
+      displayName: '',
     }
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
     this.getArticlesByTags = this.getArticlesByTags.bind(this);
     this.removeTag = this.removeTag.bind(this);
-    this.setModalShow = this.setModalShow.bind(this);
+    this.setSignInShow = this.setSignInShow.bind(this);
     this.submitUser = this.submitUser.bind(this);
-    this.handleSignInInput = this.handleSignInInput.bind(this);
-    this.handleSignInSubmit = this.submitUser.bind(this);
+    this.removeCurrentUser = this.removeCurrentUser.bind(this);
+    this.backToHome = this.backToHome.bind(this);
   }
 
   componentDidMount() {
-    this.getPopularToday();
+    // this.getPopularToday();
   }
 
   getPopularToday() {
@@ -102,55 +107,52 @@ export default class App extends React.Component {
     })
   }
 
-  setModalShow() {
-    this.setState({modalShow: !this.state.modalShow});
+  setSignInShow() {
+    this.setState({signInShow: !this.state.signInShow});
   }
 
-  submitUser(username) {
-    this.setState({ displayName: username })
+  removeCurrentUser() {
+    this.setState({ displayName: '' })
   }
-  handleSignInInput(e) {
-    const { name, value } = e.target;
-    this.setState({[name]: value});
+  
+  backToHome() {
+    this.setState({ signInShow: false })
   }
 
-  handleSignInSubmit(e) {
-      e.preventDefault();
-      const { username, password } = this.state;
-      username && password
-      ? this.props.submitUser(username, () => {
-        this.setState({
-          username: '',
-          password: '',
-        })
-      })
-      : null;
+  submitUser({username, password}, callback) {
+    this.setState({ displayName: username }, () => {
+      this.setSignInShow();
+      callback();
+    })
   }
 
   render () {
-    const { articles, totalResults, tags, modalShow, username, password } = this.state;
+    const { articles, totalResults, tags, signInShow, displayName } = this.state;
     return (
     <div>
-      <Header >
-        <MainTitle>YourNews</MainTitle>
-        <SignIn onClick={ this.setModalShow }>Sign In</SignIn>
+      <Header>
+        <MainTitle onClick={ this.backToHome }>YourNews</MainTitle>
+        {
+          !displayName
+          ? <SignIn onClick={ this.setSignInShow }>Sign In</SignIn>
+          : <UserName onClick={ this.removeCurrentUser }>{ displayName }</UserName>
+        }
       </Header>
-      <FeedContainer>
-        <SearchBar submitTag={ this.submitTag } />
-        <TagList tags={ tags } removeTag={ this.removeTag } />
-        <NewsList
-          articles={ articles }
-          total={ totalResults }
+      {
+        !signInShow
+        ? <FeedContainer>
+          <SearchBar submitTag={ this.submitTag } />
+          <TagList tags={ tags } removeTag={ this.removeTag } />
+          <NewsList
+            articles={ articles }
+            total={ totalResults }
+          />
+          </FeedContainer>
+        : <SignInPage
+          submitUser={ this.submitUser }
         />
-      </FeedContainer>
-      <SignInModal
-        show={modalShow}
-        onHide={() => this.setModalShow}
-        user={username}
-        password={password}
-        handleSignInInput={this.handleSignInInput}
-        handleSignInSubmit={this.handleSignInSubmit}
-      />
-    </div>)
+      }
+    </div>
+    )
   }
 }
