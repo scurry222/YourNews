@@ -13,7 +13,7 @@ const ArticleDivider = styled.div`
 `;
 
 
-const NewsList = ({ articles, total }) => {
+const NewsList = ({ articles, total}) => {
   const [feed, setFeed] = useState([]);
   useEffect(() => {
     setFeed(articles)
@@ -25,10 +25,11 @@ const NewsList = ({ articles, total }) => {
         ? <div>No subscriptions found. Browse through recommended tags or use the searchbar to get started.</div>
         : null
       }
+      
       {
         feed.map((article, i) => 
-          <div>
-            <ListItem key={i} article={ article }/>
+          <div key={i}>
+            <ListItem article={ article }/>
             <ArticleDivider />
           </div>
         

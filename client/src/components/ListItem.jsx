@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Collapsable from 'react-collapsable';
+
 const Article = styled.article`
   margin: 2rem;
   padding: 1rem;
@@ -21,23 +23,35 @@ const ArticleTitle = styled.div`
 
 const ArticleDescription = styled.div`
   padding: 2rem 0;
+  font-size: 1.2rem;
 `;
 
-const ListItem = ({ article }) => (
-  <Article>
-    {
-      article.urlToImage &&
-      <ArticleImage
-        src={article.urlToImage} 
-        alt="Missing Image"/>
-    }
-    <ArticleTitle>
-      { article.title }
-    </ArticleTitle>
-    <ArticleDescription>
-      { article.description }
-    </ArticleDescription>
-  </Article>
-)
+const ArticleContent = styled.a`
+`
 
+const ArticleLink = styled.a`
+`
+
+const ListItem = ({ article }) => {
+
+  return (
+      <Article>
+        {
+          article.urlToImage &&
+          <ArticleImage
+            src={article.urlToImage} 
+            alt="Missing Image"/>
+        }
+        <ArticleTitle>
+          { article.title }
+        </ArticleTitle>
+        <ArticleDescription>
+          { article.description }
+        </ArticleDescription>
+        <ArticleContent>{ article.content }</ArticleContent>
+        <br />
+        <ArticleLink href={article.url}> Read More </ArticleLink>
+      </Article>
+  )
+}
 export default ListItem;

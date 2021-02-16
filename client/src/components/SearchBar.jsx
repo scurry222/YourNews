@@ -10,6 +10,7 @@ const SearchbarContainer = styled.form`
   width: 30%;
   border-radius: 2rem;
   border: 1px solid lightgrey;
+  margin-top: 2rem;
 `;
 
 const SearchbarInput = styled.input`

@@ -14,10 +14,17 @@ const FeedContainer = styled.div`
   align-items: center;
 `
 
-const MainTitle = styled.h1`
-  padding-left: 1rem;
-  font-size: 1.5rem;
+const Header = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 2rem;
+  padding-left: 0.5rem;
   border-bottom: 2px solid lightskyblue;
+`;
+
+const MainTitle = styled.h1`
+  font-size: 1.5rem;
+
 `;
 
 
@@ -28,6 +35,7 @@ export default class App extends React.Component {
       articles: [],
       totalResults: 0,
       tags: [],
+      showModal: false,
     }
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
@@ -82,10 +90,13 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { articles, totalResults, tags } = this.state;
+    const { articles, totalResults, tags} = this.state;
     return (
     <div>
-      <MainTitle>YourNews</MainTitle>
+      <Header >
+        <MainTitle>YourNews</MainTitle>
+      </Header>
+
       <FeedContainer>
         <SearchBar submitTag={ this.submitTag } />
         <TagList tags={ tags } removeTag={ this.removeTag } />
