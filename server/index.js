@@ -40,7 +40,7 @@ app.post('/api/userTags', async(req, res) => {
   await addUserTags(username, password, tags, () => res.send());
 })
 
-app.listen(3000, function() {
-  console.log('listening on port 3000!');
+app.listen(1337, function() {
+  console.log('listening on port 1337!');
 });
 

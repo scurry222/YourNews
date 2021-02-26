@@ -8,6 +8,8 @@ import TagList from './TagList.jsx';
 import SignInPage from './SignInPage.jsx'
 import { shuffle } from '../utils.js';
 
+const Content = styled.div``;
+
 const FeedContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,7 +64,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    // this.getPopularToday();
+    this.getPopularToday();
   }
 
   getPopularToday() {
@@ -129,30 +131,32 @@ export default class App extends React.Component {
   render () {
     const { articles, totalResults, tags, signInShow, displayName } = this.state;
     return (
-    <div>
-      <Header>
-        <MainTitle onClick={ this.backToHome }>YourNews</MainTitle>
-        {
-          !displayName
-          ? <SignIn onClick={ this.setSignInShow }>Sign In</SignIn>
-          : <UserName onClick={ this.removeCurrentUser }>{ displayName }</UserName>
-        }
-      </Header>
-      {
-        !signInShow
-        ? <FeedContainer>
-          <SearchBar submitTag={ this.submitTag } />
-          <TagList tags={ tags } removeTag={ this.removeTag } />
-          <NewsList
-            articles={ articles }
-            total={ totalResults }
-          />
-          </FeedContainer>
-        : <SignInPage
-          submitUser={ this.submitUser }
-        />
-      }
-    </div>
+      <div>
+        <Content>
+          <Header>
+            <MainTitle onClick={ this.backToHome }>YourNews</MainTitle>
+            {
+              !displayName
+              ? <SignIn onClick={ this.setSignInShow }>Sign In</SignIn>
+              : <UserName onClick={ this.removeCurrentUser }>{ displayName }</UserName>
+            }
+          </Header>
+          {
+            !signInShow
+            ? <FeedContainer>
+              <SearchBar submitTag={ this.submitTag } />
+              <TagList tags={ tags } removeTag={ this.removeTag } />
+              <NewsList
+                articles={ articles }
+                total={ totalResults }
+              />
+              </FeedContainer>
+            : <SignInPage
+              submitUser={ this.submitUser }
+            />
+          }
+        </Content>
+      </div>
     )
   }
 }
