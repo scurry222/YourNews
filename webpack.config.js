@@ -4,8 +4,8 @@ var DIST_DIR = path.join(__dirname, '/client/dist');
 
 module.exports = {
   entry: {
-    index: `${SRC_DIR}/index.jsx`,
-    three: `${SRC_DIR}/three.js`,
+    index: `${SRC_DIR}/NewslistIndex.jsx`,
+    three: `${SRC_DIR}/GlobeIndex.js`,
   },
   output: {
     filename: '[name].bundle.js',
