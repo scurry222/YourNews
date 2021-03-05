@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
+import OrbitControls from 'three-orbitcontrols';
 import path from 'path';
 
 export default class Globe extends Component {
@@ -22,6 +23,8 @@ export default class Globe extends Component {
         const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
         
         camera.position.set( 0, 0, 1000 );
+
+        const controls = new OrbitControls(camera, renderer.domElement)
         
         const scene = new THREE.Scene();
         scene.background = new THREE.Color( '#000' );
@@ -45,7 +48,7 @@ export default class Globe extends Component {
             globe.add(mesh);
         })
         
-        globe.position.z = 100;
+        globe.position.z = 0;
         
         const pointLight = new THREE.PointLight(0xFFFFFF);
         
@@ -105,22 +108,22 @@ export default class Globe extends Component {
             }
           }
           document.onkeydown = checkKey;
-          var lastMove = [window.innerWidth/2, window.innerHeight/2];
-          function rotateOnMouseMove(e) {
-            e = e || window.event;
+        //   var lastMove = [window.innerWidth/2, window.innerHeight/2];
+        //   function rotateOnMouseMove(e) {
+        //     e = e || window.event;
           
-            //calculate difference between current and last mouse position
-            const moveX = ( e.clientX - lastMove[0]);
-            const moveY = ( e.clientY - lastMove[1]);
-            //rotate the globe based on distance of mouse moves (x and y) 
-            globe.rotation.y += ( moveX * .005);
-            globe.rotation.x += ( moveY * .005);
+        //     //calculate difference between current and last mouse position
+        //     const moveX = ( e.clientX - lastMove[0]);
+        //     const moveY = ( e.clientY - lastMove[1]);
+        //     //rotate the globe based on distance of mouse moves (x and y) 
+        //     globe.rotation.y += ( moveX * .005);
+        //     globe.rotation.x += ( moveY * .005);
           
-            //store new position in lastMove
-            lastMove[0] = e.clientX;
-            lastMove[1] = e.clientY;
-          }
-          document.addEventListener('mousemove', rotateOnMouseMove);
+        //     //store new position in lastMove
+        //     lastMove[0] = e.clientX;
+        //     lastMove[1] = e.clientY;
+        //   }
+        //   document.addEventListener('mousemove', rotateOnMouseMove);
     }
     render() {
         return (

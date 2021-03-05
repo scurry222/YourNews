@@ -39,6 +39,7 @@
     "react-responsive-carousel": "^3.2.12",
     "smooth-scrollbar": "^8.6.0",
     "styled-components": "^5.2.1",
-    "three": "^0.126.0"
+    "three": "^0.126.0",
+    "three-orbitcontrols": "^2.110.3"
   }
 }
