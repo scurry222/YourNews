@@ -3,44 +3,53 @@ import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import path from 'path';
 
+// Camera Globals
+const VIEW_ANGLE = 45;
+const NEAR = 0.1;
+const FAR = 10000;
+
+// Globe Globals
+const RADIUS = 200;
+const SEGMENTS = 50;
+const RINGS = 50;
+
 export default class Globe extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            wWidth: window.windowWidth,
+            wHeight: window.windowHeight,
+            wAspect: window.windowWidth / window.windowHeight,
+
+            renderer: new THREE.WebGLRenderer(),
+            scene: new THREE.Scene(),
+            camera: new THREE.PerspectiveCamera(VIEW_ANGLE, window.windowWidth / window.windowHeight, NEAR, FAR),
+            controls: ''
+        }
+    }
     componentDidMount() {
-        const container = document.getElementById('globe');
+        const { windowWidth, windowHeight, scene, renderer, camera } = this.state;
+
+        renderer.setSize(windowWidth, windowHeight);
         
-        
-        const renderer = new THREE.WebGLRenderer();
-        
-        const WIDTH = window.innerWidth;
-        const HEIGHT = window.innerHeight;
-        renderer.setSize(WIDTH, HEIGHT);
-        
-        const VIEW_ANGLE = 45;
-        const ASPECT = WIDTH / HEIGHT;
-        const NEAR = 0.1;
-        const FAR = 10000;
-        
-        
-        const camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-        
+        this.setState({
+            controls: new OrbitControls(this.state.camera, this.state.renderer.domElement)
+        })
+
         camera.position.set( 0, 0, 1000 );
 
-        const controls = new OrbitControls(camera, renderer.domElement)
-        
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
 
         renderer.setSize( window.innerWidth, window.innerHeight );
 
-        const scene = new THREE.Scene();
         scene.background = new THREE.Color( '#000' );
         
         scene.add(camera);
         
-        container.appendChild(renderer.domElement);
-        
-        const RADIUS = 200;
-        const SEGMENTS = 50;
-        const RINGS = 50;
+        this.mount.appendChild(renderer.domElement);
+
         
         const globe = new THREE.Group();
         scene.add(globe);
@@ -152,9 +161,18 @@ export default class Globe extends Component {
         render();
 
     }
+    onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+    }
+
     render() {
         return (
-            <div />
+            <div ref={ref => (this.mount = ref)}/>
         )
     }
 }
