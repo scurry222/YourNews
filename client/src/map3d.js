@@ -98,4 +98,4 @@ const Map3DGeometry = function(data, innerRadius) {
 	this.boundingSphere = new THREE.Sphere (new THREE.Vector3 (), 1);
 }
 
-Map3DGeometry.prototype = Object.create (THREE.Geometry.prototype);
+module.exports = Map3DGeometry;
