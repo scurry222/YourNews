@@ -26,12 +26,18 @@ export default class Globe extends Component {
             renderer: new THREE.WebGLRenderer(),
             scene: new THREE.Scene(),
             camera: new THREE.PerspectiveCamera(VIEW_ANGLE, window.windowWidth / window.windowHeight, NEAR, FAR),
-            controls: ''
+            controls: '',
+            globe: new THREE.Group(),
+            loader: new THREE.TextureLoader(),
+            pointLight: new THREE.PointLight(0xFFFFFF),
         }
         this.onWindowResize = this.onWindowResize.bind(this);
     }
     componentDidMount() {
-        const { windowWidth, windowHeight, scene, renderer, camera } = this.state;
+        const {
+            windowWidth, windowHeight, scene, renderer,
+            camera, globe, loader, pointLight,
+        } = this.state;
 
         renderer.setSize(windowWidth, windowHeight);
         
@@ -52,11 +58,8 @@ export default class Globe extends Component {
         
         this.mount.appendChild(renderer.domElement);
 
-        
-        const globe = new THREE.Group();
         scene.add(globe);
         
-        const loader = new THREE.TextureLoader();
         loader.load(path.join(__dirname, '../../static/land_ocean_ice_cloud_2048.jpg'), function(texture) {
             const sphere = new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS);
             const material = new THREE.MeshBasicMaterial({ map: texture });
@@ -65,8 +68,6 @@ export default class Globe extends Component {
         })
         
         globe.position.z = 0;
-        
-        const pointLight = new THREE.PointLight(0xFFFFFF);
         
         pointLight.position.x = 10;
         pointLight.position.y = 50;
