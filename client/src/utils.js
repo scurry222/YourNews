@@ -8,4 +8,15 @@ const shuffle = (array) => {
     return rand;
 };
 
-module.exports = { shuffle };
+const debounce = (fn, ms) => {
+  let timer;
+  return _ => {
+    clearTimeout(timer);
+    timer = setTimeout(_ => {
+      timer = null;
+      fn.apply(this, arguments);
+    }, ms);
+  };
+}
+
+module.exports = { shuffle, debounce };

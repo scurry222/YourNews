@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import path from 'path';
+import { debounce } from '../utils';
 
 // Camera Globals
 const VIEW_ANGLE = 45;
@@ -27,6 +28,7 @@ export default class Globe extends Component {
             camera: new THREE.PerspectiveCamera(VIEW_ANGLE, window.windowWidth / window.windowHeight, NEAR, FAR),
             controls: ''
         }
+        this.onWindowResize = this.onWindowResize.bind(this);
     }
     componentDidMount() {
         const { windowWidth, windowHeight, scene, renderer, camera } = this.state;
@@ -72,7 +74,6 @@ export default class Globe extends Component {
         
         scene.add(pointLight);
         function update () {
-
             //Render:
             renderer.render(scene, camera);
             // Schedule the next frame:
@@ -80,93 +81,25 @@ export default class Globe extends Component {
           }
           // Schedule the first frame:
           requestAnimationFrame(update);
-          function animationBuilder(direction) {
-            return function animateRotate() {
-              switch (direction) {
-                case 'up':
-                  globe.rotation.x -= 0.2;
-                  break;
-                case 'down':
-                  globe.rotation.x += 0.2;
-                  break;
-                case 'left':
-                  globe.rotation.y -= 0.2;
-                  break;
-                case 'right':
-                  globe.rotation.y += 0.2;
-                  break;
-                default:
-                  break;
-              }
-            }
-          }
-          var animateDirection = {
-            up: animationBuilder('up'),
-            down: animationBuilder('down'),
-            left: animationBuilder('left'),
-            right: animationBuilder('right')
-          }
-          function checkKey(e) {
-            e = e || window.event;
-            e.preventDefault();
-           
-            //based on keycode, trigger appropriate animation:
-            if (e.keyCode == '38') {
-              animateDirection.up();
-            } else if (e.keyCode == '40') {
-              animateDirection.down();
-            } else if (e.keyCode == '37') {
-              animateDirection.left();
-            } else if (e.keyCode == '39') {
-              animateDirection.right();
-            }
-          }
-          document.onkeydown = checkKey;
-        //   var lastMove = [window.innerWidth/2, window.innerHeight/2];
-        //   function rotateOnMouseMove(e) {
-        //     e = e || window.event;
-          
-        //     //calculate difference between current and last mouse position
-        //     const moveX = ( e.clientX - lastMove[0]);
-        //     const moveY = ( e.clientY - lastMove[1]);
-        //     //rotate the globe based on distance of mouse moves (x and y) 
-        //     globe.rotation.y += ( moveX * .005);
-        //     globe.rotation.x += ( moveY * .005);
-          
-        //     //store new position in lastMove
-        //     lastMove[0] = e.clientX;
-        //     lastMove[1] = e.clientY;
-        //   }
-        //   document.addEventListener('mousemove', rotateOnMouseMove);
+        window.addEventListener('resize', this.onWindowResize);
     }
-    onDocumentMouseMove( event ) {
 
-        event.preventDefault();
-
-        mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
-
-        raycaster.setFromCamera( mouse, camera );
-
-        const intersects = raycaster.intersectObjects( objects );
-
-        if ( intersects.length > 0 ) {
-
-            const intersect = intersects[ 0 ];
-
-            rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
-            rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
-
-        }
-
-        render();
-
-    }
     onWindowResize() {
+        const debouncedHandleResize = debounce(() => {
+            this.setState({
+                wWidth: window.innerWidth,
+                wHeight: window.innerHeight,
+                wAspect: window.innerWidth / window.innerHeight,
+            }, () => {
+                const { camera, renderer, wWidth, wHeight, wAspect } = this.state;
+                camera.aspect = wAspect;
+                camera.updateProjectionMatrix();
+        
+                renderer.setSize( wWidth, wHeight );
+            })
 
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        }, 1000);
+        debouncedHandleResize();
 
     }
 
