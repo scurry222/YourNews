@@ -26,6 +26,11 @@ export default class Globe extends Component {
 
         const controls = new OrbitControls(camera, renderer.domElement)
         
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
         const scene = new THREE.Scene();
         scene.background = new THREE.Color( '#000' );
         
@@ -124,6 +129,28 @@ export default class Globe extends Component {
         //     lastMove[1] = e.clientY;
         //   }
         //   document.addEventListener('mousemove', rotateOnMouseMove);
+    }
+    onDocumentMouseMove( event ) {
+
+        event.preventDefault();
+
+        mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
+
+        raycaster.setFromCamera( mouse, camera );
+
+        const intersects = raycaster.intersectObjects( objects );
+
+        if ( intersects.length > 0 ) {
+
+            const intersect = intersects[ 0 ];
+
+            rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );
+            rollOverMesh.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
+
+        }
+
+        render();
+
     }
     render() {
         return (
