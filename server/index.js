@@ -30,6 +30,13 @@ app.get('/api/search/:keyword', async (req, res) => {
   .catch((err) => console.error(err));
 })
 
+app.get('/api/search/:country', async (req, res) => {
+  const { country } = req.params;
+  await axios.get(`http://newsapi.org/v2/top-headlines?country=${country}&apiKey=${API_KEY}`)
+  .then((query) => res.send(query.data))
+  .catch((err) => console.error(err));
+})
+
 app.get('/api/getUser', async(req, res) => {
   const { user, password } = req.body;
   await selectOneUser(user, password, (user) => res.send(user))

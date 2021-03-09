@@ -1,46 +1,40 @@
 import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import NewsList from './List.jsx';
 import SearchBar from './SearchBar.jsx';
 import TagList from './TagList.jsx';
-import SignInPage from './SignInPage.jsx'
 import { shuffle } from '../utils.js';
+import Globe from './Globe.jsx';
 
-const Content = styled.div``;
+const Content = styled.div`
+  height: 97%;
+  width: 38%;
+  bottom: 0;
+  position: absolute;
+`;
 
 const FeedContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
-
-const Header = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
-  height: 3rem;
-  padding: 0 0.5rem;
-  border-bottom: 2px solid lightskyblue;
-`;
-
-const MainTitle = styled.h1`
-  font-size: 1.5rem;
-  top:0;
-  cursor: pointer;
-`;
-
-const SignIn = styled.button`
-
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.376) 88%, rgba(0, 0, 0, 0) 100%);
+  height: 97%;
+  bottom: 0;
+  color: white;
+  overflow: hidden;
+  overflow-y: scroll;
 `
 
-const UserName = styled.div`
-  font-size: 1.4rem;
-  cursor: pointer;
+const CollapseButton = styled.button`
+  position: absolute;
+  top: 0;
+  color: white;
 `;
 
 export default class App extends React.Component {
@@ -52,6 +46,7 @@ export default class App extends React.Component {
       tags: [],
       signInShow: false,
       displayName: '',
+      collapse: true,
     }
     this.getPopularToday = this.getPopularToday.bind(this);
     this.submitTag = this.submitTag.bind(this);
@@ -61,10 +56,13 @@ export default class App extends React.Component {
     this.submitUser = this.submitUser.bind(this);
     this.removeCurrentUser = this.removeCurrentUser.bind(this);
     this.backToHome = this.backToHome.bind(this);
+    this.toggleCollapse = this.toggleCollapse.bind(this);
+    this.grabClickedCountry = this.grabClickedCountry.bind(this);
   }
 
   componentDidMount() {
     this.getPopularToday();
+    document.addEventListener('click', this.grabClickedCountry);
   }
 
   getPopularToday() {
@@ -76,6 +74,16 @@ export default class App extends React.Component {
         })
       })
       .catch((err) => console.error(err));
+  }
+
+  grabClickedCountry() {
+    axios.get('/api/search/:country')
+      .then(({ data }) => {
+        this.setState({
+          articles: data.articles,
+          totalResults: data.totalResults
+        })
+      })
   }
 
   getArticlesByTags() {
@@ -128,35 +136,33 @@ export default class App extends React.Component {
     })
   }
 
+
+  toggleCollapse() {
+    this.setState({
+      collapse: !this.state.collapse
+    });
+  }
+
   render () {
-    const { articles, totalResults, tags, signInShow, displayName } = this.state;
+    const { articles, totalResults, tags, collapse } = this.state;
     return (
-      <div>
-        <Content>
-          <Header>
-            <MainTitle onClick={ this.backToHome }>YourNews</MainTitle>
-            {
-              !displayName
-              ? <SignIn onClick={ this.setSignInShow }>Sign In</SignIn>
-              : <UserName onClick={ this.removeCurrentUser }>{ displayName }</UserName>
-            }
-          </Header>
-          {
-            !signInShow
-            ? <FeedContainer>
-              <SearchBar submitTag={ this.submitTag } />
-              <TagList tags={ tags } removeTag={ this.removeTag } />
-              <NewsList
-                articles={ articles }
-                total={ totalResults }
-              />
-              </FeedContainer>
-            : <SignInPage
-              submitUser={ this.submitUser }
+      <Content>
+        {
+          !collapse 
+          ? <FeedContainer>
+            {/* <SearchBar submitTag={ this.submitTag } /> */}
+            {/* <TagList tags={ tags } removeTag={ this.removeTag } /> */}
+            <NewsList
+              articles={ articles }
+              total={ totalResults }
             />
-          }
-        </Content>
-      </div>
+          </FeedContainer>
+          : null
+        }
+        <CollapseButton  onClick={() => this.toggleCollapse()}>
+          <FontAwesomeIcon icon={faBars}/>
+        </CollapseButton>
+      </Content>
     )
   }
 }

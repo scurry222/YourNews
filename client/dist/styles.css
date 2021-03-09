@@ -1,11 +1,43 @@
 * {
     box-sizing: border-box;
     font-family: "Playfair Display", sans-serif;
+
+    outline: none!important;
 }
 
-body {
-    background-color: #fff;
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
 }
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: none !important;
+    background-color: transparent;
+}
+*::-webkit-scrollbar {
+    width: 3px !important;
+    background-color: transparent;
+}
+
+.header {
+    position: absolute;
+    color: white;
+    margin: auto;
+    z-index: 9000;
+    width: 100%;
+    padding: 0 0.5rem;
+    border-bottom: 2px solid rgba(135, 206, 250, 0.801);
+}
+
+#sections {
+    background-color: #fff;
+    display: flex;
+}
+
+#newslist {
+    /* display: none; */
+    color: #87cefa80
+}
+
 
 #data-scrollbar {
     position: fixed;

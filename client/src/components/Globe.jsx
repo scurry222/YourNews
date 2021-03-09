@@ -31,6 +31,7 @@ const countryColorMap = { 'PE': 1, 'BF': 2, 'FR': 3, 'LY': 4, 'BY': 5, 'PK': 6, 
 export default class Globe extends Component {
     constructor(props) {
         super(props);
+        window.globe = this;
 
         this.state = {
             wWidth: window.windowWidth,
@@ -79,22 +80,19 @@ export default class Globe extends Component {
 
         pointLight.position.x = 10;
         pointLight.position.y = 50;
-        pointLight.position.z = 0;
+        pointLight.position.z = 10;
 
         scene.add(pointLight);
 
         
         var mapTexture = new THREE.TextureLoader()
-        .load(path.join(__dirname, '../../static/earth-index-shifted-gray.png'));
-        mapTexture.needsUpdate = true;
+            .load(path.join(__dirname, '../../static/earth-index-shifted-gray.png'));
         
         var outlineTexture = new THREE.TextureLoader()
-        .load(path.join(__dirname, '../../static/earth-outline-shifted-gray.png'));
-        outlineTexture.needsUpdate = true;
+            .load(path.join(__dirname, '../../static/earth-outline-shifted-gray.png'));
         
         var blendImage = new THREE.TextureLoader()
             .load(path.join(__dirname, '../../static/earth-day.jpg'));
-        blendImage.needsUpdate = true;
 
         var planeMaterial = new THREE.ShaderMaterial(
             {
@@ -151,11 +149,9 @@ export default class Globe extends Component {
         const { scene, mouse2D, raycaster, camera } = this.state;
         mouse2D.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse2D.y = - (event.clientY / window.innerHeight) * 2 + 1;
-        console.log("CLICK");
         var countryCode = -1;
         raycaster.setFromCamera( mouse2D, camera )
         var intersectionList = raycaster.intersectObjects(scene.children, true);
-        console.log(intersectionList)
         if (intersectionList.length > 0) {
             var data = intersectionList[0];
             var d = data.point.clone().normalize();
@@ -163,19 +159,21 @@ export default class Globe extends Component {
             var v = Math.round(2048 * (0.5 - Math.asin(d.y) / Math.PI));
             var p = mapContext.getImageData(u, v, 1, 1).data;
             countryCode = p[0];
-            console.log(countryCode)
 
             for (var prop in countryColorMap) {
                 if (countryColorMap.hasOwnProperty(prop)) {
-                    if (countryColorMap[prop] === countryCode)
-                        console.log(prop, countryCode);
+                    if (countryColorMap[prop] === countryCode){
+                        window.clickedCountry = prop;
+
+                        break;
+                    }
                 }
             } // end for loop
 
             lookupContext.clearRect(0, 0, 256, 1);
 
             for (var i = 0; i < 228; i++) {
-                if (i == 0)
+                if (i === 0)
                     lookupContext.fillStyle = "rgba(0,0,0,1.0)"
                 else if (i == countryCode)
                     lookupContext.fillStyle = "rgba(100,100,0,1)"
@@ -186,7 +184,6 @@ export default class Globe extends Component {
             }
             lookupTexture.needsUpdate = true;
         }
-
     } // end mouseClick function
 
 
@@ -206,7 +203,6 @@ export default class Globe extends Component {
 
         }, 1000);
         debouncedHandleResize();
-
     }
 
     render() {

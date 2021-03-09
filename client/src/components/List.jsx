@@ -5,7 +5,7 @@ import ListItem from './ListItem.jsx';
 
 const NewsListContainer = styled.div`
   margin: 5rem 25rem;
-  width: 40%;
+  width: 90%;
 `
 
 const ArticleDivider = styled.div`

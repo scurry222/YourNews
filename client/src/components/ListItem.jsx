@@ -6,7 +6,7 @@ import Collapsable from 'react-collapsable';
 const Article = styled.article`
   margin: 2rem;
   padding: 1rem;
-  background-color: #f4f1eb;
+  // background-color: #f4f1eb;
   border-radius: 0.3rem;
 `;
 
@@ -48,7 +48,6 @@ const ListItem = ({ article }) => {
         <ArticleDescription>
           { article.description }
         </ArticleDescription>
-        <ArticleContent>{ article.content && article.content.split('[')[0] }</ArticleContent>
         <br />
         <ArticleLink href={article.url}> Read More </ArticleLink>
       </Article>
