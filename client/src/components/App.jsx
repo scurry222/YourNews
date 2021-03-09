@@ -12,7 +12,7 @@ import Globe from './Globe.jsx';
 
 const Content = styled.div`
   height: 97%;
-  width: 38%;
+  max-width: 20rem;
   bottom: 0;
   position: absolute;
 `;
@@ -35,6 +35,8 @@ const CollapseButton = styled.button`
   position: absolute;
   top: 0;
   color: white;
+  border: none;
+  background: transparent;
 `;
 
 export default class App extends React.Component {
@@ -77,13 +79,18 @@ export default class App extends React.Component {
   }
 
   grabClickedCountry() {
-    axios.get('/api/search/:country')
-      .then(({ data }) => {
-        this.setState({
-          articles: data.articles,
-          totalResults: data.totalResults
+    console.log(window.clickedCountry)
+    if (!window.clickedCountry || window.clickedCountry === undefined) {
+      this.getPopularToday();
+    } else {
+      axios.get(`/api/search/:${window.clickedCountry}`)
+        .then(({ data }) => {
+          this.setState({
+            articles: data.articles,
+            totalResults: data.totalResults
+          })
         })
-      })
+    }
   }
 
   getArticlesByTags() {

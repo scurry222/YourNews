@@ -159,17 +159,17 @@ export default class Globe extends Component {
             var v = Math.round(2048 * (0.5 - Math.asin(d.y) / Math.PI));
             var p = mapContext.getImageData(u, v, 1, 1).data;
             countryCode = p[0];
+            let country = null;
 
             for (var prop in countryColorMap) {
                 if (countryColorMap.hasOwnProperty(prop)) {
                     if (countryColorMap[prop] === countryCode){
-                        window.clickedCountry = prop;
+                        country = prop;
 
-                        break;
                     }
                 }
             } // end for loop
-
+            window.clickedCountry = country;
             lookupContext.clearRect(0, 0, 256, 1);
 
             for (var i = 0; i < 228; i++) {

@@ -4,12 +4,13 @@ import ListItem from './ListItem.jsx';
 
 
 const NewsListContainer = styled.div`
-  margin: 5rem 25rem;
-  width: 90%;
+  // margin: 5rem 25rem;
+  width: 100%;
+  height: 97%;
+  top: 0;
 `
 
 const ArticleDivider = styled.div`
-  border-bottom: lightskyblue solid 0.1rem;
 `;
 
 
