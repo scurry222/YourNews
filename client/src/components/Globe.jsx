@@ -9,11 +9,6 @@ const VIEW_ANGLE = 45;
 const NEAR = 0.1;
 const FAR = 10000;
 
-// Globe Globals
-const RADIUS = 200;
-const SEGMENTS = 50;
-const RINGS = 50;
-
 const mapCanvas = document.createElement('canvas');
 mapCanvas.width = 4096;
 mapCanvas.height = 2048;
@@ -84,18 +79,22 @@ export default class Globe extends Component {
 
         pointLight.position.x = 10;
         pointLight.position.y = 50;
-        pointLight.position.z = 400;
+        pointLight.position.z = 0;
 
         scene.add(pointLight);
 
+        
         var mapTexture = new THREE.TextureLoader()
-            .load(path.join(__dirname, '../../static/earth-outline-shifted-gray.png'))
-
+        .load(path.join(__dirname, '../../static/earth-index-shifted-gray.png'));
+        mapTexture.needsUpdate = true;
+        
         var outlineTexture = new THREE.TextureLoader()
-            .load(path.join(__dirname, '../../static/earth-outline-shifted-gray.png'));
-
+        .load(path.join(__dirname, '../../static/earth-outline-shifted-gray.png'));
+        outlineTexture.needsUpdate = true;
+        
         var blendImage = new THREE.TextureLoader()
-            .load(path.join(__dirname, '../../static/land_ocean_ice_cloud_2048.jpg'));
+            .load(path.join(__dirname, '../../static/earth-day.jpg'));
+        blendImage.needsUpdate = true;
 
         var planeMaterial = new THREE.ShaderMaterial(
             {
@@ -155,11 +154,6 @@ export default class Globe extends Component {
         console.log("CLICK");
         var countryCode = -1;
         raycaster.setFromCamera( mouse2D, camera )
-        // var material = new THREE.LineBasicMaterial({
-        //     color: 0x0000ff
-        // });
-        // var arrow = new THREE.ArrowHelper( camera.getWorldDirection(), camera.getWorldPosition(), 1000, Math.random() * 0xffffff );
-        // scene.add( arrow );
         var intersectionList = raycaster.intersectObjects(scene.children, true);
         console.log(intersectionList)
         if (intersectionList.length > 0) {
@@ -184,13 +178,12 @@ export default class Globe extends Component {
                 if (i == 0)
                     lookupContext.fillStyle = "rgba(0,0,0,1.0)"
                 else if (i == countryCode)
-                    lookupContext.fillStyle = "rgba(50,50,0,0.5)"
+                    lookupContext.fillStyle = "rgba(100,100,0,1)"
                 else
                     lookupContext.fillStyle = "rgba(0,0,0,1.0)"
 
                 lookupContext.fillRect(i, 0, 1, 1);
             }
-
             lookupTexture.needsUpdate = true;
         }
 
